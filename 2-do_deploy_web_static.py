@@ -11,43 +11,45 @@ env.user = 'ubuntu'
 
 
 def do_deploy(archive_path):
-    """ Function to deploy code archive and decompress it """
-
-    """ Check archive_path """
-    if not os.path.isfile(archive_path):
+    """
+    Deploys an archive to the web servers
+    """
+    """ Checking for archive_path """
+    if not exists(archive_path):
         return False
 
-    """ Variables for filenames """
-    compressed_file = archive_path.split("/")[-1]
-
-    no_extension = compressed_file.split(".")[0]
+    """ File names with and without extension """
+    arch_name = os.path.basename(archive_path)
+    arch_name_minus = os.path.splitext(arch_name)[0]
 
     try:
-        remote_path = "/data/web_static/releases/{}/".format(no_extension)
-
-        sym_link = "/data/web_static/current"
-
-        """ Upload archive to /tmp/ on webservers 1 & 2 """
+        """ Saving archive to tmp on the web servers """
         put(archive_path, "/tmp/")
 
-        run("sudo mkdir -p {}".format(remote_path))
+        """ Creating a directory for the deployed files"""
+        run("sudo mkdir -p /data/web_static/releases/{}/"
+            .format(arch_name_minus))
 
-        """ Decompress archive """
-        run("sudo tar -xvzf /tmp/{} -C {}".format(compressed_file,
-                                                  remote_path))
+        """ Decompressing the archive into the we_static folder """
+        run("sudo tar -xzf /tmp/{} -C /data/web_static/releases/{}/"
+            .format(arch_name, arch_name_minus))
 
-        run("sudo rm /tmp/{}".format(compressed_file))
+        """ Deleting the archive from the server """
+        run("sudo rm /tmp/{}".format(arch_name))
 
-        run("sudo mv {}/web_static/* {}".format(remote_path, remote_path))
+        """ Moving files to new folder and deleting the old symbolic link """
+        run("sudo mv /data/web_static/releases/{}/web_static/* \
+            /data/web_static/releases/{}/"
+            .format(arch_name_minus, arch_name_minus))
+        run("sudo rm -rf /data/web_static/releases/{}/web_static"
+            .format(arch_name_minus))
 
-        run("sudo rm -rf {}/web_static".format(remote_path))
-
-        """ Delete symbolic link file from webserver """
+        """ Deleting the old symbolic link and creating a new one """
         run("sudo rm -rf /data/web_static/current")
-
-        """ Create new symbolic link linked to new code version """
-        run("sudo ln -sf {} {}".format(remote_path, sym_link))
+        run("sudo ln -s /data/web_static/releases/{}/ \
+                /data/web_static/current".format(arch_name_minus))
 
         return True
+
     except Exception as e:
         return False
