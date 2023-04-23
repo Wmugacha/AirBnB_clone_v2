@@ -15,30 +15,17 @@ else
 fi
 
 #create folders
-if [ ! -d "./data" ]
-then
-    sudo mkdir ./data
-fi
+sudo mkdir -p /data/
 
-if [ ! -d "./data/web_static/" ]
-then
-    sudo mkdir ./data/web_static/
-fi
+sudo mkdir -p /data/web_static/
 
-if [ ! -d "./data/web_static/releases/" ]
-then
-    sudo mkdir ./data/web_static/releases/
-fi
+sudo mkdir -p /data/web_static/releases/
 
-if [ ! -d "./data/web_static/shared/" ]
-then
-    sudo mkdir ./data/web_static/shared/
-fi
+sudo mkdir -p /data/web_static/shared/
 
-if [ ! -d "./data/web_static/releases/test/" ]
-then
-    sudo mkdir ./data/web_static/releases/test/
-fi
+sudo mkdir -p /data/web_static/releases/test/
+
+sudo touch /data/web_static/releases/test/index.html
 
 #creating a dummy html page
 sudo echo "<!DOCTYPE html>
@@ -53,10 +40,10 @@ sudo echo "<!DOCTYPE html>
 # Create a symbolic link and it should be recreated everytime script is run
 sudo rm -f /data/web_static/current
 
-sudo ln -snf ./data/web_static/releases/test/ ./data/web_static/current
+sudo ln -snf /data/web_static/releases/test/ /data/web_static/current
 
 # Transfer ownership of /data/ to Ubuntu user and Group
-sudo chown -R ubuntu:ubuntu ./data/
+sudo chown -R ubuntu:ubuntu /data/
 
 #setting up the page to be served
 sudo sed -i '/listen 80 default_server/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
