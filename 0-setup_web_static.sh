@@ -1,25 +1,63 @@
 #!/usr/bin/env bash
-# setting up my web servers for  the deployment of web_static
+# script that sets up your web servers for the deployment of web_static
 
+if ! [ -x "$(command -v nginx)" ]; then
+# Nginx is not installed
+echo "Nginx is not installed. Installing now..."
 sudo apt-get update
-sudo apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
 
-sudo mkdir -p /data/
-sudo mkdir -p /data/web_static/
-sudo mkdir -p /data/web_static/releases/
-sudo mkdir -p /data/web_static/shared/
-sudo mkdir -p /data/web_static/releases/test/
-sudo touch /data/web_static/releases/test/index.html
-sudo echo "<html>
+sudo apt-get install nginx -y
+
+sudo ufw allow 'Nginx HTTP'
+else
+  # Nginx is installed
+  echo "Nginx is already installed."
+fi
+
+#create folders
+if [ ! -d "./data" ]
+then
+    mkdir ./data
+fi
+
+if [ ! -d "./data/web_static/" ]
+then
+    mkdir ./data/web_static/
+fi
+
+if [ ! -d "./data/web_static/releases/" ]
+then
+    mkdir ./data/web_static/releases/
+fi
+
+if [ ! -d "./data/web_static/shared/" ]
+then
+    mkdir ./data/web_static/shared/
+fi
+
+if [ ! -d "./data/web_static/releases/test/" ]
+then
+    mkdir ./data/web_static/releases/test/
+fi
+
+#creating a dummy html page
+echo "<!DOCTYPE html>
+<html>
   <head>
   </head>
   <body>
     Holberton School
   </body>
 </html>" | sudo tee /data/web_static/releases/test/index.html
-sudo rm -f /data/web_static/current
-sudo ln -s /data/web_static/releases/test /data/web_static/current
-sudo chown -R ubuntu:ubuntu /data/
-sudo sed -i '/listen 80 default_server/a location /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-enabled/default
+
+# Create a symbolic link and it should be recreated everytime script is run
+ln -snf ./data/web_static/releases/test/ ./data/web_static/current
+
+# Transfer ownership of /data/ to Ubuntu user and Group
+sudo chown -R ubuntu:ubuntu ./data/
+
+#setting up the page to be served
+sudo sed -i '/server_name _;/a \ \tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}\n' /etc/nginx/sites-available/default
+
+#restart the server
 sudo service nginx restart
