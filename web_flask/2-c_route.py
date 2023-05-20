@@ -25,7 +25,7 @@ def hbnb_start():
 def display_c(text):
     """ C is fun """
     modified_text = text.replace("_", " ")
-    return f"c {escape(modified_text)}"
+    return f"C {escape(modified_text)}"
 
 
 if __name__ == "__main__":
