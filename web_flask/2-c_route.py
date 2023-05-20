@@ -21,8 +21,8 @@ def hbnb_start():
 
 
 @app.route('/c/<text>', strict_slashes=False)
-def display_c(text):
-    """ C is fun """
+def display_C(text):
+    """ Use of string variable """
     modified_text = text.replace("_", " ")
     return f"C {modified_text}"
 
