@@ -31,4 +31,4 @@ def display_c(text):
 if __name__ == "__main__":
     # python3 -m web_flask.2-c_route
     app.run(debug=True)
-    app.run(host="0.0.0.0", port=0)
+    app.run(host="0.0.0.0", port=5000)
