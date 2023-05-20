@@ -12,21 +12,20 @@ app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
-    """ Start Flask Application"""
+    """ Function to display Hello hbnb """
     return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb_start():
-    """ Start hbnb Application """
+    """ Function to display hbnb """
     return "HBNB"
 
 
 @app.route('/c/<text>', strict_slashes=False)
 def display_C(text):
-    """ Use of string variable """
-    modified_text = text.replace("_", " ")
-    return f"C {escape(modified_text)}"
+    """ Function to display C with a value variable """
+    return 'C ' + text.replace("_", " ")
 
 
 if __name__ == "__main__":
