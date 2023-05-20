@@ -13,6 +13,7 @@ def hello_hbnb():
     """ Start Flask """
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def hbnb_start():
     """ Start hbnb """
