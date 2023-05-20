@@ -5,6 +5,7 @@ AirBnB Clone
 """
 
 from flask import Flask
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -25,7 +26,7 @@ def hbnb_start():
 def display_C(text):
     """ Use of string variable """
     modified_text = text.replace("_", " ")
-    return f"C {modified_text}"
+    return f"C {escape(modified_text)}"
 
 
 if __name__ == "__main__":
