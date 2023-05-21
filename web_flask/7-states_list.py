@@ -1,11 +1,11 @@
 #/usr/bin/python3
 """
-AirBnB Clone
+Module to run an instance of AirBnB Clone with Flask
 """
 
-from flask import Flask, render_template
 from models import storage
 from models.state import State
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -18,7 +18,7 @@ def list_states():
 
 
 @app.teardown_appcontext
-def close_session():
+def close_session(exception=None):
     """ Function to remove current SQLalchemy session """
     storage.close()
 
