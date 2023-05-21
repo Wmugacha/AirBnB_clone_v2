@@ -1,4 +1,4 @@
-#/usr/bin/python3
+#!/usr/bin/python3
 """
 Module to run an instance of AirBnB Clone with Flask
 """
