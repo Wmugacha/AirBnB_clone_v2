@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Module to create a mysql engine"""
+
 from os import getenv
 import sqlalchemy
 from models.base_model import BaseModel, Base
