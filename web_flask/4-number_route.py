@@ -4,7 +4,7 @@ AirBnB Clone
 *** Web Framework with Flask ***
 """
 
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -37,7 +37,8 @@ def display_python(text="is cool"):
 @app.route('/number/<int:n>', strict_slashes=False)
 def is_number(n):
     """Function to display an integer"""
-    return f'{n} is a number'
+    if isinstance(n, int):
+        return f'{n} is a number'
 
 
 if __name__ == "__main__":
